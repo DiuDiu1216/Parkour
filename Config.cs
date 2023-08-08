@@ -31,7 +31,7 @@ namespace Parkour
                     new(),
                     new(){ (1,1)},
                     200,
-                    new(){1},
+                    new(){new NetItem(1,1,1)},
                     new(){"/help"}) }
 
 
@@ -105,9 +105,9 @@ namespace Parkour
         public (short, short) 结束点 { get; set; }
         public List<(short, short)> 重生点 { get; set; }
         public int 玩家血量 { get; set; }
-        public List<int> 玩家背包 { get; set; }
+        public List<NetItem> 玩家背包 { get; set; }
         public List<string> 执行指令 { get; set; }
-        public ParkourConfig(string name, (short, short) startPoint, (short, short) endPoint,List<(short, short)> spawn,int health,List<int> inventory,List<string> commands)
+        public ParkourConfig(string name, (short, short) startPoint, (short, short) endPoint,List<(short, short)> spawn,int health,List<NetItem> inventory,List<string> commands)
         {
             跑酷名称 = name;
             开始点 = startPoint;
@@ -117,6 +117,7 @@ namespace Parkour
             玩家背包 = inventory;
             执行指令 = commands;
         }
+        
         public static ParkourConfig GetParkourByStartPoint((short, short) startPoint)
         {
             var c = ConfigFile.Read(Parkour.Configpath);
@@ -138,6 +139,20 @@ namespace Parkour
             for (int i = 0; i < c.ParkourConfig.Count; i++)
             {
                 if (c.ParkourConfig[i].结束点 == endPoint)
+                {
+                    pc = c.ParkourConfig[i];
+                    break;
+                }
+            }
+            return pc;
+        }
+        public static ParkourConfig GerParkourByName(string name)
+        {
+            var c = ConfigFile.Read(Parkour.Configpath);
+            ParkourConfig pc = null;
+            for (int i = 0; i < c.ParkourConfig.Count; i++)
+            {
+                if (c.ParkourConfig[i].跑酷名称 == name)
                 {
                     pc = c.ParkourConfig[i];
                     break;
